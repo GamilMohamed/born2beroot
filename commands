@@ -1,0 +1,67 @@
+#passer en mode root
+su -
+#installer sudo
+apt install sudo
+# pr check si ca fonctionne
+dpkg -l | grep sudo
+# pr add sudo a un user
+adduser mgamil sudo
+#reboot
+reboot
+#### SUDO
+sudo nano /etc/sudoers.d/README
+#limiter sudo a 3 tentatives
+Defaults        passwd_tries=3
+#ajouter message d'erreur perso
+Defaults	badpass_message="..."
+#archiver tous les logs
+sudo mkdir /var/log/sudo
+Defaults        logfile="/var/log/sudo/<filename>"
+#archiver les inputs
+Defaults        log_input,log_output
+Defaults        iolog_dir="/var/log/sudo"
+#activer le tty
+Defaults        requiretty
+#les chemins de sudo
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+#supprimer user
+sudo userdel
+#ajt user
+sudo adduser <name>
+
+# mdp limits
+ucredit		nombre minimum de grand caracteres 
+dcredit		nombre minimum de chiffres
+difok		nombre de carecteres differents de l'ancien mdp
+retry		
+minlen		length minimum pr le mdp
+
+# monitoring
+
+NOM ARCHITECHTURE
+uname -a
+NB DE CPU PHYSIQUE
+cat /proc/cpuinfo | grep "physical id" | wc -l
+NB DE CPU VIRTUELS
+cat /proc/cpuinfo | grep "processor" | wc -l
+UTILISATION MEMOIRE
+free -m | grep Mem | awk '{printf("%s/%sMB (%.2f%%)", $3, $2, ($3/$2)*100)}'
+UTILISATION DISQUE
+df -h --total | grep total | awk
+UTILISATION CPU
+top -bn1 | grep "CPU" | awk '{printf(%.1f%%", $2 + $4)}'
+DERNIER REBOOT
+uptime -s | awk '{printf("%s %s\n", $1, substr($2, 1, length($2) - 3))}'
+VERIFICATION LVM ACTIVE OU NON
+lsblk | grep "lvm" | wc -l | awk '{if ($1){printf("yes"); exit;} else print "no"}'
+NOMBRE DE CONNEXIONS TCP
+netstat -an | grep "ESTABLISHED" | wc -l
+NOMBRE USERS UTILISANTS LE SERVER
+users | wc -w
+ADRESSE MAC ET NOM
+hostname -I
+cat /sys/class/net/enp0s3/adress
+NOMBRE DE COMMANDES SUDO
+journalctl _COMM=sudo | grep "COMMAND" | wc -l
+
+
