@@ -1,44 +1,52 @@
+# NOM ARCHITECHTURE
 arch=$(uname -a)
+#uname -a = all informations
+# NB DE CPU PHYSIQUE
 cpuphysique=$(cat /proc/cpuinfo | grep "physical id" | wc -l)
+# NB DE CPU VIRTUELS
 cpuvirtuel=$(cat /proc/cpuinfo | grep "processor" | wc -l)
+# UTILISATION MEMOIRE
 memusage=$(free -m | grep Mem | awk '{printf("%s/%sMB (%.2f%%)\n", $3, $2, ($3/$2)*100)}')
+#free -m =  display in mebibytes
+#printf("%s/%sMB (%.2f%%)\n", $3, $2, ($3/$2)*100)
+# UTILISATION DISQUE
 diskusage=$(df -h --total | grep total | awk '{printf("%.1f/%.fGb (%s)\n", $3, $2, $5)}')
+#df -h          print en puissance de 1024 pr meilleur lecture
+#df --total     affiche un grand total
+#printf affiche la taille utilisee sur la taille totale et le pourcentage.
+# UTILISATION CPU
 cpuload=$(top -bn1 | grep Cpu | awk '{printf("%.1f%%\n", $2 + $4)}')
+#top -bn1
+# -b affiche top par lots selon les linites de -n
+# 
+# DERNIER REBOOT
 lastboot=$(uptime -s | awk '{printf("%s %s\n", $1, substr($2, 1, length($2) - 3))}')
+#uptime -s s pour since, depuis
+#le printf retire les secondes, substring le deuxieme argument, de la longueur de l'argument moins 3
+# VERIFICATION LVM ACTIVE OU NON
 lvm=$(lsblk | grep "lvm" | wc -l | awk '{if ($1){printf("yes\n"); exit;} else print "no\n"}')
-tcp=$(netstat -an | grep "ESTABLISHED" | wc -l)
+#assez facile a comprendre
+# NOMBRE DE CONNEXIONS TCP
+tcp=$(netstat | grep "ESTABLISHED" | wc -l)
+# #NOMBRE USERS UTILISANTS LE SERVER
 userlog=$(users | wc -w)
+# -w compte les mots
+# -l compte les lignes
+# ADRESSE MAC ET NOM
 ip=$(cat /sys/class/net/enp3s0f0/address)
 host=$(hostname -I | awk '{print $1}')
-#NOM ARCHITECHTURE
+# NOMBRE DE COMMANDES SUDO
+journalctl _COMM=sudo | grep "COMMAND" | wc -l
 echo "#ARCHITECTURE: $arch"
-
-# #NB DE CPU PHYSIQUE
 echo "#CPU physiques: $cpuphysique"
-
-#NB DE CPU VIRTUELS
 echo "#CPU virtuels: $cpuvirtuel"
-# #UTILISATION MEMOIRE
 echo "#Memory Usage: $memusage"
-
-# UTILISATION DISQUE
 echo "#Disk Usage: $diskusage"
-# UTILISATION CPU
 echo "#CPU load: $cpuload"
-
-# #DERNIER REBOOT
 echo "#Last boot: $lastboot"
-# #VERIFICATION LVM ACTIVE OU NON
 echo "#LVM use: $lvm"
-
-# #NOMBRE DE CONNEXIONS TCP
 echo "#Connections TCP : $tcp"
-# #NOMBRE USERS UTILISANTS LE SERVER
 echo "#User log: $userlog"
-
-# #ADRESSE MAC ET NOM
 echo "#Network: IP $host $ip"
-# #NOMBRE DE COMMANDES SUDO
-# journalctl _COMM=sudo | grep "COMMAND" | wc -l
-
+echo "#Sudo : $sudo cmd"
 
