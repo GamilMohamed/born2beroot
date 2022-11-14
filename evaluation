@@ -1,0 +1,4 @@
+sudo systemctl ufw status
+sudo systemctl sshd status
+aaname -I
+

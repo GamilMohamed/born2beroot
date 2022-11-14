@@ -3,9 +3,12 @@ Domain name
 Root pwd	b2b
 Full name	
 User		mgamil
-User pwd	mgamilb2b
+User pwd	Q1w2e3r4t5y6
 encryption	olha
-
+sql		mysqlb2b
+		wpb2b
+wordpress	mgamil
+wordpresspwd	mgamil42
 ###USER TEST
 username	test
 password	PwdExpires1
